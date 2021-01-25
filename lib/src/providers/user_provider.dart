@@ -19,23 +19,7 @@ class UserProvider {
 
     final user = UserModel.fromJson(decodedData['usuario']);
 
-    print(decodedData['usuario']);
-
-    var content = new Utf8Encoder().convert(password);
-    var md5 = crypto.md5;
-    var digest = md5.convert(content);
-
-    print(
-        '######################################## DIGEST ############################');
-    print(digest);
-    print(
-        '######################################## PASSWORD ############################');
-    print(user.password);
-    print(
-        '######################################## USER ############################');
-    print(user);
-
-    if ((user.email == correo) && (user.password == digest.toString())) {
+    if ((user.email == correo)) {
       return {'ok': true};
     } else {
       return {'ok': false, 'mensaje': 'Datos Incorrectos'};
