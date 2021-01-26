@@ -14,7 +14,9 @@ class UserGlobalProvider {
 
     final Map<String, dynamic> decodedData = json.decode(resp.body);
 
-    final user = UserModel.fromJson(decodedData);
+    print(decodedData);
+
+    final user = UserModel.fromJson(decodedData['usuario']);
 
     return user;
   }
