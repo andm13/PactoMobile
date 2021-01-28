@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pacto_movil/src/pages/change_password.dart';
 import 'package:pacto_movil/src/pages/home_page.dart';
 import 'package:pacto_movil/src/pages/login_page.dart';
 import 'package:pacto_movil/src/pages/meeting_page.dart';
@@ -12,7 +13,8 @@ Map<String, WidgetBuilder> getRoutesAplication() {
     'home': (BuildContext context) => HomePage(),
     'perfil': (BuildContext context) => ProfilePage(),
     'capacitaciones': (BuildContext context) => TrainingPage(),
-    'reuniones': (BuildContext context) => MeetingPage()
+    'reuniones': (BuildContext context) => MeetingPage(),
+    'cambiarContrasena': (BuildContext context) => ChangePassword()
   };
 
   return routes;
