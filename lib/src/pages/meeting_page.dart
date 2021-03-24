@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:pacto_movil/src/blocs/provider.dart';
+import 'package:pacto_movil/src/blocs/user_bloc.dart';
+import 'package:pacto_movil/src/models/user_model.dart';
+import 'package:pacto_movil/src/providers/meeting_provider.dart';
 import 'package:pacto_movil/src/widgets/drawer.dart';
 
 class MeetingPage extends StatelessWidget {
+  UserBloc userBloc;
   @override
   Widget build(BuildContext context) {
+    userBloc = Provider.userGlobal(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Reuniones'),
@@ -11,9 +17,25 @@ class MeetingPage extends StatelessWidget {
       drawer: AppDrawer(),
       body: Stack(
         children: [
-          ListView(
-            children: [_meetingBox(context), _meetingBox(context)],
-          )
+          StreamBuilder(
+            stream: userBloc.tokenStream,
+            builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+              
+              return FutureBuilder(
+                future: MeetingProvider().getReunion(snapshot.data),
+                builder: (BuildContext context,
+                    AsyncSnapshot<Map<String, dynamic>> snapshot) {
+                  if (snapshot.hasData) {
+                    print(snapshot.data);
+                    return ListView(
+                      children: [_meetingBox(context), _meetingBox(context)],
+                    );
+                  }
+                  return CircularProgressIndicator();
+                },
+              );
+            },
+          ),
         ],
       ),
     );

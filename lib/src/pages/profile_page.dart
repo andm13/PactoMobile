@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:pacto_movil/src/blocs/provider.dart';
 import 'package:pacto_movil/src/blocs/user_bloc.dart';
 import 'package:pacto_movil/src/models/user_model.dart';
 import 'package:pacto_movil/src/providers/user_global_provider.dart';
+import 'package:pacto_movil/src/providers/user_provider.dart';
 import 'package:pacto_movil/src/widgets/drawer.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -52,7 +55,8 @@ class _ProfilePageState extends State<ProfilePage> {
                   _inputTelefonoCasa("Telefono Movil", 'Telefono Movil',
                       Icons.phone, TextInputType.number, usuario),
                   _cambiarContrasena(context),
-                  _botonActualizar('Actualizar', Colors.blue[600], usuario)
+                  _botonActualizar(
+                      'Actualizar', Colors.blue[600], usuario, context)
                 ]);
               }
               return Center(
@@ -165,7 +169,8 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget _botonActualizar(String texto, Color color, UserModel usuario) {
+  Widget _botonActualizar(
+      String texto, Color color, UserModel usuario, BuildContext context) {
     return RaisedButton(
       child: Container(
         child: Text(texto),
@@ -174,13 +179,24 @@ class _ProfilePageState extends State<ProfilePage> {
       elevation: 0.0,
       color: color,
       textColor: Colors.white,
-      onPressed: () => _actualizar(usuario),
+      onPressed: () => _actualizar(usuario, context),
     );
   }
 
-  void _actualizar(UserModel usuario) {
+  _actualizar(UserModel usuario, BuildContext context) async {
+    print('actualizar');
     if (formKey.currentState.validate()) {
-      print(usuario.toJson());
+      Stream token = userBloc.tokenStream;
+      token.listen((value) async {
+        final t = value;
+        final userProvider = UserProvider();
+        Map info = await userProvider.updateUser(usuario, t);
+        if (info['ok']) {
+          final snackBar =
+              SnackBar(content: Text('Se ha actualizado el usuario'));
+          Scaffold.of(context).showSnackBar(snackBar);
+        }
+      });
     }
   }
 }

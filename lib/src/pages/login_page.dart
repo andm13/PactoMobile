@@ -177,7 +177,7 @@ class LoginPage extends StatelessWidget {
     final userBloc = Provider.userGlobal(context);
 
     if (info['ok']) {
-      userBloc.cargarUsuario(bloc.email);
+      userBloc.cargarUsuario(bloc.email, info['token']);
       Navigator.pushReplacementNamed(context, 'home');
     } else {
       mostrarAlerta(context, info['mensaje']);
